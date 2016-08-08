@@ -662,6 +662,19 @@ $.fn.dropdown = function(parameters) {
               : module.get.query(),
             afterFiltered = function() {
               if(module.is.multiple()) {
+                // Make sure that the selected values are marked active
+                // in the dropdown list so that they get hidden when filterActive()
+                // is called underneath:
+                const values = module.get.values();
+                if (typeof values === 'object') {
+                  const selector = [];
+                  values.forEach((value) => {
+                    selector.push('[data-value="' + value + '"]');
+                  });
+                  $item.filter(selector.join(','))
+                    .addClass(className.active)
+                  ;
+                }
                 module.filterActive();
               }
               module.select.firstUnfiltered();
